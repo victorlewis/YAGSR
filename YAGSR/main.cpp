@@ -8,9 +8,60 @@
 
 GLFWwindow* window = nullptr;
 
+float cube[] = {
+	// Back
+	-1.0f, -1.0f, -1.0f,
+	1.0f, -1.0f, -1.0f,
+	1.0f, 1.0f, -1.0f,
+	1.0f, 1.0f, -1.0f,
+	-1.0f, 1.0f, -1.0f,
+	-1.0f, -1.0f, -1.0f,
+
+	// Front
+	-1.0f, -1.0f, 1.0f,
+	1.0f, -1.0f, 1.0f,
+	1.0f, 1.0f, 1.0f,
+	1.0f, 1.0f, 1.0f,
+	-1.0f, 1.0f, 1.0f,
+	-1.0f, -1.0f, 1.0f,
+
+	// Bottom
+	-1.0f, -1.0f, -1.0f,
+	1.0f, -1.0f, -1.0f,
+	1.0f, -1.0f, 1.0f,
+	1.0f, -1.0f, 1.0f,
+	-1.0f, -1.0f, 1.0f,
+	-1.0f, -1.0f, -1.0f,
+
+	// Top
+	-1.0f, 1.0f, -1.0f,
+	1.0f, 1.0f, -1.0f,
+	1.0f, 1.0f, 1.0f,
+	1.0f, 1.0f, 1.0f,
+	-1.0f, 1.0f, 1.0f,
+	-1.0f, 1.0f, -1.0f,
+
+	// Left
+	-1.0f, -1.0f, -1.0f,
+	-1.0f, 1.0f, -1.0f,
+	-1.0f, 1.0f, 1.0f,
+	-1.0f, 1.0f, 1.0f,
+	-1.0f, -1.0f, 1.0f,
+	-1.0f, -1.0f, -1.0f,
+
+	// Right
+	1.0f, -1.0f, -1.0f,
+	1.0f, 1.0f, -1.0f,
+	1.0f, 1.0f, 1.0f,
+	1.0f, 1.0f, 1.0f,
+	1.0f, -1.0f, 1.0f,
+	1.0f, -1.0f, -1.0f,
+};
+
+
 int main(const int argc, const char* argv[]) {
 
-	std::string ply_path = "C:/Users/lewis/Pictures/gs/bicycle.ply";
+	std::string ply_path = "C:/Users/lewis/Pictures/gs/truck/point_cloud.ply";
 
 	 //use std::unique_ptr<GSSplats> loadFromSplatsPly(const std::string& path)
 	std::unique_ptr<GSSplats> splatPtr = loadFromSplatsPly(ply_path);
@@ -70,7 +121,7 @@ int main(const int argc, const char* argv[]) {
 	double previousTime = glfwGetTime();
 
 	// get cube 
-	standardShader cube_shader("basic_vrt.glsl", "basic_pix.glsl");
+	standardShader cube_shader("basic_vrt.glsl", "basic_geo.glsl", "basic_pix.glsl");
 
 	//const float cube_positions[][3] = {  .5f, .5f, .5f, .5f, -.5f, -.5f, .5f, -.5f, -.5f, -.5f, .5f, -.5f, -.5f, .5f, -.5f, .5f-.5f, .5f, -.5f, -.5f, .5f, .5f, .5f, .5f, .5f, .5f, .5f, -.5f, -.5f, .5f, -.5f, -.5f, -.5f, -.5f, -.5f, -.5f, .5f, -.5f, .5f, .5f, .5f, .5f, .5f, .5f, -.5f, .5f, .5f, -.5f, -.5f, .5f, .5f, -.5f, .5f, .5f, -.5f, .5f, -.5f, -.5f, -.5f, -.5f, -.5f, -.5f, .5f, -.5f, -.5f, .5f, .5f, -.5f, -.5f, .5f, .5f, -.5f, };
 	//int num_vertices = 24;
@@ -78,32 +129,13 @@ int main(const int argc, const char* argv[]) {
 
 	int num_points = splatPtr->numSplats;
 
-	/* copy it from:
-	template<int D>
-	struct RichPoint
-	{
-		float pos[3];
-		float n[3];
-		float dc[3];
-		float shs[D];
-		float opacity;
-		float scale[3];
-		float rot[4];
-	};
-
-	struct GSSplats
-	{
-		bool valid; // Are the in-memory splats valid?
-		int numSplats; // How many splats there are?
-		std::vector<RichPoint<45>> splats;
-	};*/
 
 	float* p_positions = new float[num_points * 3];
 	//float* p_normals = new float[num_points * 3];
 	float* p_dc = new float[num_points * 3];
 	//float* p_shs = new float[num_points * 45];
 	//float* p_opacity = new float[num_points];
-	//float* p_scale = new float[num_points * 3];
+	float* p_scale = new float[num_points * 3];
 	//float* p_rot = new float[num_points * 4];
 
 	for (int i = 0; i < num_points; i++)
@@ -116,9 +148,28 @@ int main(const int argc, const char* argv[]) {
 
 		//p_opacity[i] = splatPtr->splats[i].opacity;
 
-		//for (int j = 0; j < 3; j++) p_scale[i * 3 + j] = splatPtr->splats[i].scale[j];
+		for (int j = 0; j < 3; j++) p_scale[i * 3 + j] = splatPtr->splats[i].scale[j];
 		//for (int j = 0; j < 4; j++) p_rot[i * 4 + j] = splatPtr->splats[i].rot[j];
 	}
+
+	///////////////////////////////////////////////////////////////////////////////////////////
+	int _numVerts = 36;
+
+	// make the cube vao
+	GLuint _vao = GL_NONE;
+	glGenVertexArrays(1, &_vao);
+
+	GLuint _vbo = GL_NONE;
+	glGenBuffers(1, &_vbo);
+
+	glBindVertexArray(_vao);
+	glBindBuffer(GL_ARRAY_BUFFER, _vbo);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(cube), cube, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, nullptr);
+	///////////////////////////////////////////////////////////////////////////////////////////
+
+
 
 	GLuint positionBuffer = GL_NONE;
 	glGenBuffers(1, &positionBuffer);
@@ -131,7 +182,19 @@ int main(const int argc, const char* argv[]) {
 	glBindBuffer(GL_ARRAY_BUFFER, colourBuffer);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * num_points * 3, p_dc, GL_STATIC_DRAW);
 	GLint cube_colourAttribute = glGetAttribLocation(cube_shader.shader, "dc");
-
+	if (cube_colourAttribute == -1) {
+		std::cout << "Warning: dc attribute not found in shader" << std::endl;
+		// Handle error
+	}
+	GLuint scaleBuffer = GL_NONE;
+	glGenBuffers(1, &scaleBuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, scaleBuffer);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * num_points * 3, p_scale, GL_STATIC_DRAW);
+	GLint cube_scaleAttribute = glGetAttribLocation(cube_shader.shader, "scale");
+	if (cube_scaleAttribute == -1) {
+		std::cout << "Warning: scale attribute not found in shader" << std::endl;
+		// Handle error
+	}
 	///////////////////////////////////////////////////////////////////////////////////////////
 	while (!glfwWindowShouldClose(window)) {
 		assert(glGetError() == GL_NONE);
@@ -190,14 +253,8 @@ int main(const int argc, const char* argv[]) {
 
 			glUseProgram(cube_shader.shader);
 
-			// in vertices
-			glBindBuffer(GL_ARRAY_BUFFER, positionBuffer);
-			glVertexAttribPointer(cube_positionAttribute, 3, GL_FLOAT, GL_FALSE, 0, 0);
-			glEnableVertexAttribArray(cube_positionAttribute);
+			glBindVertexArray(_vao);
 
-			glBindBuffer(GL_ARRAY_BUFFER, colourBuffer);
-			glVertexAttribPointer(cube_colourAttribute, 3, GL_FLOAT, GL_FALSE, 0, 0);
-			glEnableVertexAttribArray(cube_colourAttribute);
 
 			// Other uniforms in the interface block
 			{
@@ -211,10 +268,12 @@ int main(const int argc, const char* argv[]) {
 				glUnmapBuffer(GL_UNIFORM_BUFFER);
 			}
 
-			glDrawArrays(GL_POINTS, 0, num_points);
+			//glDrawArrays(GL_POINTS, 0, num_points);
+			glDrawArraysInstanced(GL_TRIANGLES, 0, _numVerts, num_points);
 
-			glDisableVertexAttribArray(cube_positionAttribute);
-			glDisableVertexAttribArray(cube_colourAttribute);
+			//glDisableVertexAttribArray(cube_positionAttribute);
+			//glDisableVertexAttribArray(cube_colourAttribute);
+			//glDisableVertexAttribArray(cube_scaleAttribute);
 
 
 		} // for each eye

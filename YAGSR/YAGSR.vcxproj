@@ -139,6 +139,7 @@
     <ClInclude Include="simpler_ply.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="basic_geo.glsl" />
     <None Include="basic_pix.glsl" />
     <None Include="basic_vrt.glsl" />
   </ItemGroup>

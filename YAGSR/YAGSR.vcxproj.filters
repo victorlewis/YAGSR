@@ -49,5 +49,8 @@
     <None Include="basic_pix.glsl">
       <Filter>Source Files\shaders\basic</Filter>
     </None>
+    <None Include="basic_geo.glsl">
+      <Filter>Source Files\shaders\basic</Filter>
+    </None>
   </ItemGroup>
 </Project>
