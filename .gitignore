@@ -1,0 +1,7 @@
+/x64
+/YAGSR/x64
+/vcpkg
+/vcpkg_installed
+vcpkg.json
+vcpkg-configuration.json
+/.vs

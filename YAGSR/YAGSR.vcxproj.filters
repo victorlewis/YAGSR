@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source Files\shaders">
+      <UniqueIdentifier>{d4cf6784-9553-4a42-b1a8-f2df84a66421}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\shaders\basic">
+      <UniqueIdentifier>{d5a6e3c6-9af1-4c7b-a6d9-c0311c9de92d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\file_handler">
+      <UniqueIdentifier>{08846905-9fff-4591-a8a4-345d5b35eca5}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="matrix.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OpenGLUtils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="shaderCompilation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="simpler_ply.h">
+      <Filter>Source Files\file_handler</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="basic_vrt.glsl">
+      <Filter>Source Files\shaders\basic</Filter>
+    </None>
+    <None Include="basic_pix.glsl">
+      <Filter>Source Files\shaders\basic</Filter>
+    </None>
+  </ItemGroup>
+</Project>
